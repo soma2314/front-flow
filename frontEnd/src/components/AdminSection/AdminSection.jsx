@@ -74,6 +74,7 @@ const AdminSection = () => {
     try {
       const response = await axios.get(`${baseurl}/admin-products-list`, {
         withCredentials: true,
+        credentials: 'include',
       });
       setProducts(response.data.products);
     } catch (error) {
@@ -116,6 +117,7 @@ const AdminSection = () => {
       await axios.post(`${baseurl}/createProduct`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
+        credentials: 'include',
       });
       toast.success("Product added successfully!");
       

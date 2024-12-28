@@ -1,125 +1,141 @@
-import express from "express"; 
+import express from "express";
 import { uploadOnCloudinary } from "../../utils/cloudinary.js";
 import { Product } from "../../models/product.models.js";
 
 
-export const createProductController = async (req, res) => {
-    console.log("createProductController"); 
-    
-    const {title, description, price,image,  category, subcategory, quantity, seller} = req.body;
-    console.log("Details i got from frontEnd", req.body);
-    
-    console.log("getting the user details from the token"); 
-    if(!req.user){
-        return res.status(401).json({
-            message:"Access denied... No token provided..."
-        });
-    }
-    console.log("got the user details");
-    console.log("verifying the role of the user"); 
-    if(req.user.role !== "admin"){
-        return res.status(403).json({
-            message:"Access denied... You are not authorized to create a product"
-        });
-    }
-    console.log("user is admin"); 
-    
-    if(!title || !description || !price || !category || !subcategory || !quantity || !seller){
-        return res.status(400).json({
-            message:"All fields are required"
-        });
-    }
-    console.log("all fields are there");
-    
+export const createProductController = async(req, res) => {
     try {
-        console.log("Adding tro the cloudinary");
-        
-        const response = await uploadOnCloudinary(req.file.path);
-        console.log("message from cloudinary", response);  
-        
+        console.log("createProductController");
+
+        // 1. Auth checks
+        if (!req.user) {
+            return res.status(401).json({
+                message: "Access denied... No token provided..."
+            });
+        }
+
+        if (req.user.role !== "admin") {
+            return res.status(403).json({
+                message: "Access denied... You are not authorized to create a product"
+            });
+        }
+
+        // 2. Validate request body
+        const { title, description, price, category, subcategory, quantity, seller } = req.body;
+
+        if (!title || !description || !price || !category || !subcategory || !quantity || !seller) {
+            return res.status(400).json({
+                message: "All fields are required"
+            });
+        }
+
+        // 3. Check for image file
+        if (!req.file) {
+            return res.status(400).json({
+                message: "Image file is required"
+            });
+        }
+
+        // 4. Upload to Cloudinary
+        console.log("Uploading to cloudinary");
+        const cloudinaryResponse = await uploadOnCloudinary(req.file.buffer);
+
+        if (!cloudinaryResponse) {
+            return res.status(500).json({
+                message: "Failed to upload image"
+            });
+        }
+
+        // 5. Create and save product
         const product = new Product({
             title,
             description,
             price,
-            image: response.url,
+            image: cloudinaryResponse.url,
             category,
-            subcategory:req.body.subcategory,
+            subcategory,
             quantity,
-            seller, 
+            seller,
             author: req.user.objectId,
-            cloudinary_id: response.public_id
+            cloudinary_id: cloudinaryResponse.public_id
         });
-        console.log("saving the product to the database and here are the product details", product);
-        
+
+        console.log("Saving product:", product);
         await product.save();
 
         return res.status(200).json({
-            message:"Product created successfully"
+            success: true,
+            message: "Product created successfully",
+            product
         });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error(Uploading to cloudinary and saving to database)" }); 
-    }
-}
 
-export const getAdminProducts = async (req, res) => {
+    } catch (error) {
+        console.error("Error in createProductController:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+};
+export const getAdminProducts = async(req, res) => {
     console.log("getAdminProducts");
     console.log("getting the user details from the token");
-    if(!req.user){
+    if (!req.user) {
         return res.status(401).json({
-            message:"Access denied... No token provided..."
+            message: "Access denied... No token provided..."
         });
     }
     console.log("got the user details");
     console.log("verifying the role of the user");
-    if(req.user.role !== "admin"){
+    if (req.user.role !== "admin") {
         return res.status(403).json({
-            message:"Access denied... You are not authorized to view the products"
+            message: "Access denied... You are not authorized to view the products"
         });
     }
     console.log("user is admin");
     try {
-        console.log("fetching the products from the database"); 
-        const products = await Product.find({author: req.user.objectId}).select("-author -__v -createdAt -updatedAt");
-        console.log("fecthing finished");  
+        console.log("fetching the products from the database");
+        const products = await Product.find({ author: req.user.objectId }).select("-author -__v -createdAt -updatedAt");
+        console.log("fecthing finished");
         return res.status(200).json({
-            message:"Products fetched successfully",
+            message: "Products fetched successfully",
             products
         });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Internal server error(Fetching products from database)", products }); 
+        res.status(500).json({ message: "Internal server error(Fetching products from database)", products });
     }
 }
 
-export const editProductController = async (req, res) => {
+export const editProductController = async(req, res) => {
     console.log("editProductController");
-    const {title, description, price, category, quantity, seller} = req.body;
+    const { title, description, price, category, quantity, seller } = req.body;
     console.log("getting the user details from the token");
-    if(!req.user){
+    if (!req.user) {
         return res.status(401).json({
-            message:"Access denied... No token provided..."
+            message: "Access denied... No token provided..."
         });
     }
     console.log("got the user details");
     console.log("verifying the role of the user");
-    if(req.user.role !== "admin"){
+    if (req.user.role !== "admin") {
         return res.status(403).json({
-            message:"Access denied... You are not authorized to edit a product"
+            message: "Access denied... You are not authorized to edit a product"
         });
     }
     console.log("user is admin");
-    if(!title || !description || !price || !category || !quantity || !seller){
+    if (!title || !description || !price || !category || !quantity || !seller) {
         return res.status(400).json({
-            message:"All fields are required"
+            message: "All fields are required"
         });
     }
     console.log("all fields are there");
     try {
         const product = await Product.findById(req.params.id);
-        if(!product){
+        if (!product) {
             return res.status(404).json({
-                message:"Product not found"
+                message: "Product not found"
             });
         }
         product.title = title;
@@ -130,30 +146,30 @@ export const editProductController = async (req, res) => {
         product.seller = seller;
         await product.save();
         return res.status(200).json({
-            message:"Product updated successfully"
+            message: "Product updated successfully"
         });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error(Updating product in database)" });
     }
 }
-    
+
 
 
 
 // details are there in the 
-    // req.user
-    // example
-    // req.user = {
-    //     "email": {
-    //       "objectId": "676d3814e09949b38f63b7b2",
-    //       "name": "somanth mikali",
-    //       "email": "somaadmin@123",
-    //       "role": "admin"
-    //     },
-    //     "iat": 1735214138,
-    //     "exp": 1735300538
-    //   }
+// req.user
+// example
+// req.user = {
+//     "email": {
+//       "objectId": "676d3814e09949b38f63b7b2",
+//       "name": "somanth mikali",
+//       "email": "somaadmin@123",
+//       "role": "admin"
+//     },
+//     "iat": 1735214138,
+//     "exp": 1735300538
+//   }
 
 // message from cloudinary {
 //     asset_id: '8e736108125567458fc91de0e120be6c',

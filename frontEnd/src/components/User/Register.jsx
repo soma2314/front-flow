@@ -61,6 +61,7 @@ const Register = () => {
         },
         {
           withCredentials: true,
+          credentials: 'include',
           headers: {
             "Content-Type": 'application/x-www-form-urlencoded'
           },
