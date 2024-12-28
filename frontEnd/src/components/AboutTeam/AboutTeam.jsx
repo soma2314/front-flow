@@ -13,20 +13,24 @@ function AboutTeam() {
   
   const fetchSomeInfo = async () => {
     try {
-      console.log('Fetching from:', `${baseurl}/v2/aboutTeam`); // Debug URL
+      // Remove the template literal $ since it's in the h1 text
+      console.log('Fetching from:', `${baseurl}/v2/aboutTeam`);
       const response = await axios.get(`${baseurl}/v2/aboutTeam`, {
-        withCredentials: true
+        withCredentials: true,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
       });
-      console.log('Response:', response.data); // Debug response
+      console.log('Response:', response.data);
       toast.success("Fetched some info.");
       return response.data;
     } catch (error) {
-      console.error("Full error:", error); // Debug full error
+      console.error("Full error:", error);
       setError(error.message);
       toast.error(`Failed to fetch some info: ${error.message}`);
     }
-  };
-
+  }; 
   useEffect(() => {
     fetchSomeInfo();
   }, []);
@@ -34,7 +38,7 @@ function AboutTeam() {
   return (
     <div className='aboutTeam'>
       <h1>Meet our team</h1>
-      <h1>I am calling for ${baseurl}/v2/aboutTeam/</h1>
+      <h1>I am calling for {baseurl}/v2/aboutTeam/</h1>
       {error && <div className="error">Error: {error}</div>}
     </div>
   );
