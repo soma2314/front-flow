@@ -59,6 +59,9 @@ const Header = () => {
               <Link to="/docs" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95">
                 Docs
               </Link>
+              <Link to="/about-team" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95">
+                About team
+              </Link>
               {isAuth && (
                 <Link to="/api-endpoints" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95">
                   Api Endpoints
