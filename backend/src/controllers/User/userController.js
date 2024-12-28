@@ -30,8 +30,14 @@ export const loginController = async(req, res) => {
     if (!email || !password) {
         res.status(400).json({ message: ("All input are required, or in am not getting proper things from the frontend"), receivedDetails: req.body });
     }
-    const response = await User.findOne();
-    res.status(200).json({ message: ("All input are there, or in am getting proper things from the frontend"), dbResponseLength: response.length, receivedDetails: req.body, fromDB: response });
+    const response = await User.find({}); // Returns an array of all matching documents
+    res.status(200).json({
+        message: "All input are there, or I am getting proper things from the frontend",
+        dbResponseLength: response.length, // The length of the array of documents
+        receivedDetails: req.body,
+        fromDB: response
+    });
+
     // const user = await User.findOne({ email: email });
     // if (!user) {
     //     res.status(404).json({ message: ("User not found"), receivedDetails: req.body });
