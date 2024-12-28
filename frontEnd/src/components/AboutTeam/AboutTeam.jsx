@@ -34,6 +34,7 @@ function AboutTeam() {
   return (
     <div className='aboutTeam'>
       <h1>Meet our team</h1>
+      <h1>I am calling for ${baseurl}/v2/aboutTeam/</h1>
       {error && <div className="error">Error: {error}</div>}
     </div>
   );
