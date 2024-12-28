@@ -19,6 +19,8 @@ const app = express();
 
 
 const CLIENT_URL = process.env.CLIENT_URL;
+console.log(CLIENT_URL);
+
 
 app.use(
     cors({
@@ -38,6 +40,11 @@ app.use("/api/v1", getProductsRoutes)
 
 app.get('/', (req, res) => {
     res.send('Hello World! finally the backedn deployed');
+})
+
+app.get('/api/v5/aboutTeam', (req, res) => {
+    console.log("dummyController is hit");
+    res.json({ message: "Simple dummy controller for about team is hit" });
 })
 
 app.get('/check-env', (req, res) => {
