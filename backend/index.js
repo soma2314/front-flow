@@ -1,94 +1,68 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import cors from 'cors'
-import loginroutes from './src/routes/loginroutes.js'
-import apiRoutes from './src/routes/apiRoutes.js'
+import cors from 'cors';
+import loginroutes from './src/routes/loginroutes.js';
+import apiRoutes from './src/routes/apiRoutes.js';
 import cookieParser from 'cookie-parser';
-import createProductRoutes from './src/routes/createProductRoutes.js'
-import getProductsRoutes from './src/routes/getProductsRoutes.js'
-import user from './src/routes/user.js'
+import createProductRoutes from './src/routes/createProductRoutes.js';
+import getProductsRoutes from './src/routes/getProductsRoutes.js';
+import user from './src/routes/user.js';
 
-dotenv.config();
+dotenv.config({
+    path: "./.env"
+});
 
 const PORT = process.env.PORT || 8080;
 const app = express();
-const CLIENT_URL = process.env.CLIENT_URL;
 
-// CORS configuration
+const CLIENT_URL = process.env.CLIENT_URL;
+console.log(CLIENT_URL);
 app.use(
     cors({
-        origin: [CLIENT_URL],
-        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-        allowedHeaders: [
-            'Content-Type',
-            'Authorization',
-            'X-Requested-With',
-            'Accept',
-            'Origin',
-            'Access-Control-Allow-Headers',
-            'Access-Control-Request-Method',
-            'Access-Control-Request-Headers',
-            'Access-Control-Allow-Credentials'
-        ],
-        exposedHeaders: ['Content-Range', 'X-Content-Range', 'set-cookie'],
+        origin: CLIENT_URL,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Date', 'X-Api-Version'],
         credentials: true,
-        maxAge: 86400, // 24 hours
-        preflightContinue: false,
-        optionsSuccessStatus: 204
+        maxAge: 86400 // CORS preflight cache time in seconds (24 hours)
     })
-)
+);
 
-// Middleware configuration
 app.use(express.json({ limit: "1000kb" }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true, limit: "1000kb" }));
 app.use(express.static("public"));
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
-});
-
-// Routes
-app.use("/api/v1/auth", loginroutes);
+app.use("/api/v1", loginroutes);
 app.use("/api/v1", apiRoutes);
-app.use("/api/v1/products", createProductRoutes);
-app.use("/api/v1/products", getProductsRoutes);
-app.use("/api/v1/users", user);
+app.use("/api/v1", createProductRoutes);
+app.use("/api/v1", getProductsRoutes);
 
-// Health check route
-app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+app.get('/', (req, res) => {
+    res.send('Hello World! finally the backend deployed');
 });
 
-// Database connection
-const connectDB = async() => {
-    try {
-        await mongoose.connect(process.env.mongoUrl, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log(`Database connected: ${mongoose.connection.host}`);
-    } catch (error) {
-        console.error('Database connection error:', error);
-        process.exit(1);
-    }
-};
+// https://front-flow-v1.vercel.app/api/v1/v2/aboutTeam
+app.get('/api/v1/v2/aboutTeam', (req, res) => {
+    console.log("dummyController is hit at:", new Date().toISOString());
+    res.json({ message: "Simple dummy controller for about team is hit" });
+});
 
-// Server initialization
-const startServer = async() => {
+app.get('/check-env', (req, res) => {
     try {
-        await connectDB();
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-            console.log(`Accepting requests from: ${CLIENT_URL}`);
-        });
+        const clientUrl = process.env.CLIENT_URL;
+        res.json({ clientUrl });
     } catch (error) {
-        console.error('Server startup error:', error);
-        process.exit(1);
+        res.json({ error: error.message });
     }
-};
+});
 
-startServer();
+try {
+    const res = await mongoose.connect(process.env.mongoUrl);
+    console.log(`db connected ${res.connection.host}`);
+    app.listen(PORT, () => {
+        console.log('Server is running on port', PORT);
+    });
+} catch (error) {
+    console.log('some error in server connecting db', error);
+}
