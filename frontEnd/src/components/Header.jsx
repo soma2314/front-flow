@@ -10,32 +10,60 @@ const Header = () => {
   const name = useSelector((state) => state.user.name);
   
   return (
-    <header className="relative z-50">
+    <header className="relative z-20">
       <nav className="bg-base-300 backdrop-blur-sm border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             {/* Left Section: Dropdown and Logo */}
             <div className="flex items-center">
-              <div className="sm:hidden">
-                <div className="dropdown">
-                  <div tabIndex={0} role="button" className="p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 transition-transform hover:scale-95">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 6h16M4 12h8m-8 6h16"
-                      />
-                    </svg>
-                  </div>
-                  <ul tabIndex={0} className="dropdown-content menu bg-gray-800 rounded-lg shadow-lg mt-2 py-2 w-48">
-                    {/* ... dropdown items remain the same ... */}
+              <div className="sm:hidden relative">
+                <div className="dropdown dropdown-bottom">
+                  <label 
+                    tabIndex={0} 
+                    className="btn btn-ghost p-2 hover:bg-gray-800 rounded-md cursor-pointer"
+                  >
+                    <Menu className="h-6 w-6 text-gray-400 hover:text-white" />
+                  </label>
+                  <ul 
+                    tabIndex={0} 
+                    className="dropdown-content z-[999] menu p-2 shadow-lg bg-gray-800 rounded-lg w-52 absolute left-0 mt-2"
+                  >
+                    <li>
+                      <Link 
+                        to="/" 
+                        className="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm"
+                      >
+                        Home
+                      </Link>
+                    </li>
+                    <li>
+                      <Link 
+                        to="/docs" 
+                        className="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm"
+                      >
+                        Docs
+                      </Link>
+                    </li>
+                    {isAuth && (
+                      <li>
+                        <Link 
+                          to="/api-endpoints" 
+                          className="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm"
+                        >
+                          Api Endpoints
+                        </Link>
+                      </li>
+                    )}
+                    {role === 'admin' && (
+                      <li>
+                        <Link 
+                          to="/admin-section" 
+                          className="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm"
+                        >
+                          Admin Section
+                        </Link>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>
@@ -53,22 +81,31 @@ const Header = () => {
 
             {/* Center Section: Navigation Links */}
             <div className="hidden sm:flex sm:items-center sm:ml-6 space-x-4">
-              <Link to="/" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95">
+              <Link 
+                to="/" 
+                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95"
+              >
                 Home
               </Link>
-              <Link to="/docs" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95">
+              <Link 
+                to="/docs" 
+                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95"
+              >
                 Docs
               </Link>
-              <Link to="/about-team" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95">
-                About team
-              </Link>
               {isAuth && (
-                <Link to="/api-endpoints" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95">
+                <Link 
+                  to="/api-endpoints" 
+                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95"
+                >
                   Api Endpoints
                 </Link>
               )}
               {role === 'admin' && (
-                <Link to="/admin-section" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95">
+                <Link 
+                  to="/admin-section" 
+                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-all duration-300 transform hover:scale-95"
+                >
                   Admin Section
                 </Link>
               )}
