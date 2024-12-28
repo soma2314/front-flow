@@ -13,8 +13,8 @@ function AboutTeam() {
   
   const fetchSomeInfo = async () => {
     try {
-      console.log('Fetching from:', `${baseurl}/aboutTeam`); // Debug URL
-      const response = await axios.get(`${baseurl}/aboutTeam`, {
+      console.log('Fetching from:', `${baseurl}/v2/aboutTeam`); // Debug URL
+      const response = await axios.get(`${baseurl}/v2/aboutTeam`, {
         withCredentials: true
       });
       console.log('Response:', response.data); // Debug response

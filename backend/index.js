@@ -42,7 +42,8 @@ app.get('/', (req, res) => {
     res.send('Hello World! finally the backedn deployed');
 })
 
-app.get('/api/v5/aboutTeam', (req, res) => {
+// https://front-flow-v1.vercel.app/api/v1/v2/aboutTeam
+app.get('/api/v1/v2/aboutTeam', (req, res) => {
     console.log("dummyController is hit");
     res.json({ message: "Simple dummy controller for about team is hit" });
 })
