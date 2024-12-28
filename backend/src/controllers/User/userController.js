@@ -24,7 +24,8 @@ export const logoutController = async(req, res) => {
         path: "/",
         secure: true,
         httpOnly: true,
-        sameSite: 'none'
+        sameSite: 'none',
+        domain: new URL(process.env.CLIENT_URL).hostname,
     });
     return res.status(200).send("Logout successful");
 }

@@ -73,7 +73,28 @@ const Main = () => {
 
     return (
         <>
-            <ToastContainer theme='dark' />
+            <ToastContainer
+  position="bottom-right"
+  autoClose={3000}
+  hideProgressBar={false}
+  newestOnTop
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="dark"
+  limit={3}
+  style={{
+    zIndex: 9999
+  }}
+  toastStyle={{
+    backgroundColor: '#333',
+    borderRadius: '8px',
+    padding: '12px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+  }}
+/>
             <RouterProvider router={router} />
         </>
     );
