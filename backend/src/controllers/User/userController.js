@@ -66,6 +66,7 @@ export const loginController = async(req, res) => {
         path: "/",
         expires: new Date(Date.now() + 86400000), // 24 hours
         secure: true, // Make sure this is enabled in production with HTTPS
+        sameSite: 'none', // Important for cross-domain (cookie will be sent even if the request is made from a different domain)
         httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
     });
 
