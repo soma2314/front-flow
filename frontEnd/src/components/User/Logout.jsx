@@ -1,3 +1,4 @@
+// Frontend Logout Component
 import { useDispatch } from "react-redux";
 import { removeEmail } from "../../app/Slice/userSlice";
 import axios from "axios";
@@ -5,16 +6,34 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const baseurl = import.meta.env.VITE_BASE_URL; 
+const baseurl = import.meta.env.VITE_BASE_URL;
+
 async function handleLogout(dispatch) {
     try {
+        // Make sure the baseurl matches exactly with your CLIENT_URL env variable
         const response = await axios.get(`${baseurl}/logout`, {
             withCredentials: true,
+            credentials: 'include',
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'
+            }
         });
-        
-        // Only proceed if the server confirms logout
+
         if (response.status === 200) {
+            // Clear any local storage or session storage if you're using any
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Clear Redux state
             dispatch(removeEmail());
+
+            // Manually clear cookies from client side as backup
+            document.cookie.split(";").forEach(cookie => {
+                document.cookie = cookie
+                    .replace(/^ +/, "")
+                    .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`);
+            });
+            
             toast.success("Logout successful");
             return true;
         }
@@ -36,9 +55,12 @@ function Logout() {
             try {
                 const success = await handleLogout(dispatch);
                 if (success) {
+                    // Increased timeout to ensure all cleanup is complete
                     setTimeout(() => {
+                        // Force reload after navigation to ensure clean state
                         navigate("/");
-                    }, 1000);
+                        window.location.reload();
+                    }, 1500);
                 } else {
                     setLogoutError(true);
                 }
@@ -52,10 +74,12 @@ function Logout() {
     }, [dispatch, navigate]);
 
     if (logoutError) {
-        return <div>Logout failed. Please try again.</div>;
+        return <div className="text-center text-red-500">
+            Logout failed. Please try again or refresh the page.
+        </div>;
     }
 
-    return <div>Logging out...</div>;
+    return <div className="text-center">Logging out...</div>;
 }
 
 export default Logout;
