@@ -5,9 +5,10 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
+const baseurl = import.meta.env.VITE_BASE_URL; 
 async function handleLogout(dispatch) {
     try {
-        await axios.get(`http://localhost:3000/api/v1/logout`, {
+        await axios.get(`${baseurl}/logout`, {
             withCredentials: true,
             credentials: 'include',
         });
