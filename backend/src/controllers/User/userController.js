@@ -32,11 +32,11 @@ export const loginController = async(req, res) => {
     }
     const user = await User.findOne({ email: email });
     if (!user) {
-        res.status(404).json({ message: ("User not found") });
+        res.status(404).json({ message: ("User not found"), receivedDetails: req.body });
     } else {
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) {
-            res.status(401).send("Invalid credentials");
+            res.status(401).json({ message: ("Incorrect password"), receivedDetails: req.body });
         } else {
             console.log("password correct");
             const details = {
