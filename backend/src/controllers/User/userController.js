@@ -1,15 +1,14 @@
-import {User} from "../../models/user.models.js"
+import { User } from "../../models/user.models.js"
 import bcrypt from "bcrypt";
 import generateToken from "../../tokenGeneration/generateToken.js";
 
 
-export const userController = async (req, res) => {
+export const userController = async(req, res) => {
     console.log("I am hit from the frontend dashboard", req.user);
-    
-    if(!req.user.email){
+
+    if (!req.user.email) {
         res.status(401).send("Access denied...No token provided...");
-    }
-    else{
+    } else {
         res.status(200).send({
             email: req.user.email,
             role: req.user.role,
@@ -18,28 +17,28 @@ export const userController = async (req, res) => {
     }
 }
 
-export const logoutController = async (req, res) => {
+export const logoutController = async(req, res) => {
     console.log("came for the logout");
-    
+
     res.clearCookie("token");
     res.status(200).send("Logout successful");
 }
 
-export const loginController = async (req, res) => {
-    const {email, password} = req.body;
-    console.log("I am hit from the frontend login",);
-    
-    const user = await User.findOne({email: email});
-    if(!user){
-        res.status(404).json({message:("User not found")});
+export const loginController = async(req, res) => {
+    const { email, password } = req.body;
+    console.log("I am hit from the frontend login", );
+    if (!email || !password) {
+        res.status(400).json({ message: ("All input are required, or in am not getting proper things from the frontend"), receivedDetails: req.body });
     }
-    else{
+    const user = await User.findOne({ email: email });
+    if (!user) {
+        res.status(404).json({ message: ("User not found") });
+    } else {
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
-        if(!isPasswordCorrect){
+        if (!isPasswordCorrect) {
             res.status(401).send("Invalid credentials");
-        }
-        else{
-            console.log("password correct"); 
+        } else {
+            console.log("password correct");
             const details = {
                 objectId: user._id,
                 name: user.name,
@@ -53,9 +52,9 @@ export const loginController = async (req, res) => {
                 expires: new Date(Date.now() + 86400000), // 24 hours
                 secure: true, // Make sure this is enabled in production with HTTPS
                 httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
-              });
+            });
             console.log("Cookie set successfully");
-            
+
             res.status(201).json({
                 message: "Login successful",
                 user: {
