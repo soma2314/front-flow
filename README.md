@@ -1,6 +1,7 @@
 # Ecommerce-product-details
 
-Some change in readMe
+Some change in readMe, minor
+
 api-key-26dbbb14-f4ee-497c-997c-b7f0337784e0
 
 const categories = {
