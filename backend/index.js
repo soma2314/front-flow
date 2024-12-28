@@ -27,15 +27,36 @@ console.log(CLIENT_URL);
 //         origin: CLIENT_URL,
 //         credentials: true
 //     })
+// // )
+// app.use(
+//     cors({
+//         origin: [CLIENT_URL],
+//         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//         allowedHeaders: ['Content-Type', 'Authorization'],
+//         credentials: true
+//     })
 // )
-app.use(
-    cors({
-        origin: [CLIENT_URL],
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
-        credentials: true
-    })
-)
+
+
+const allowCors = (req, res, next) => {
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', CLIENT_URL); // Use your CLIENT_URL instead of '*'
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    );
+
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+    next();
+};
+
+// Use it in your Express app
+app.use(allowCors);
+
 
 app.use(express.json({ limit: "1000kb" }))
 app.use(cookieParser())
