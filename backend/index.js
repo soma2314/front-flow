@@ -17,16 +17,18 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 
 const CLIENT_URL = process.env.CLIENT_URL;
+const normalizedClientUrl = CLIENT_URL.replace(/\/$/, '');
+
 console.log(CLIENT_URL);
-app.use(
-    cors({
-        origin: CLIENT_URL,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Date', 'X-Api-Version'],
-        credentials: true,
-        maxAge: 86400 // CORS preflight cache time in seconds (24 hours)
-    })
-);
+app.use(cors({
+    origin: [
+        normalizedClientUrl,
+        `${normalizedClientUrl}/`
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Date', 'X-Api-Version']
+}));
 
 app.use(express.json({ limit: "1000kb" }));
 app.use(cookieParser());
