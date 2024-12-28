@@ -30,7 +30,7 @@ console.log(CLIENT_URL);
 // )
 app.use(
     cors({
-        origin: ["https://front-flow-frontend-v1.vercel.app"],
+        origin: [CLIENT_URL],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true
