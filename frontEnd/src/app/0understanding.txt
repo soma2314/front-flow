@@ -1,0 +1,8 @@
+See
+1. the reducers talk about the methods involed to edit our store values
+2. Store where the actual things gonna store
+Above both are actually comes from the reducx
+
+Now below ones are wired fro the react, i.e u can say react specific
+3. useSelector - To fetch the things
+4. useDispatch  - To send new or updated requests i.e calling the reducers 
