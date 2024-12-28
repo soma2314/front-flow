@@ -20,8 +20,13 @@ export const userController = async(req, res) => {
 export const logoutController = async(req, res) => {
     console.log("came for the logout");
 
-    res.clearCookie("token");
-    res.status(200).send("Logout successful");
+    res.clearCookie("token", {
+        path: "/",
+        secure: true,
+        httpOnly: true,
+        sameSite: 'none'
+    });
+    return res.status(200).send("Logout successful");
 }
 
 export const loginController = async(req, res) => {

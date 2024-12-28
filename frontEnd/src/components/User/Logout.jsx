@@ -9,6 +9,7 @@ async function handleLogout(dispatch) {
     try {
         await axios.get(`http://localhost:3000/api/v1/logout`, {
             withCredentials: true,
+            credentials: 'include',
         });
         dispatch(removeEmail());
         toast.success("Logout successful");
