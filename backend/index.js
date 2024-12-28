@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 // https://front-flow-v1.vercel.app/api/v1/v2/aboutTeam
 app.get('/api/v1/v2/aboutTeam', (req, res) => {
     console.log("dummyController is hit at:", new Date().toISOString());
-    res.setHeader('Access-Control-Allow-Origin', 'https://front-flow-frontend-v1.vercel.app');
+    res.setHeader('Access-Control-Allow-Origin', CLIENT_URL);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.json({ message: "Simple dummy controller for about team is hit" });
 })
