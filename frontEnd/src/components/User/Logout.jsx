@@ -9,8 +9,7 @@ const baseurl = import.meta.env.VITE_BASE_URL;
 async function handleLogout(dispatch) {
     try {
         await axios.get(`${baseurl}/logout`, {
-            withCredentials: true,
-            credentials: 'include',
+            withCredentials: true, 
         });
         dispatch(removeEmail());
         toast.success("Logout successful");
