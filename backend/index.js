@@ -16,9 +16,13 @@ dotenv.config({
 const PORT = process.env.PORT || 8080;
 const app = express();
 
+
+
+const CLIENT_URL = process.env.CLIENT_URL;
+
 app.use(
     cors({
-        origin: process.env.CLIENT_URL,
+        origin: CLIENT_URL,
         credentials: true
     })
 )
@@ -32,11 +36,19 @@ app.use("/api/v1", apiRoutes)
 app.use("/api/v1", createProductRoutes)
 app.use("/api/v1", getProductsRoutes)
 
-const CLIENT_URL = process.env.CLIENT_URL;
-
 app.get('/', (req, res) => {
-    res.send('Hello World! finally the backedn deployed', CLIENT_URL);
+    res.send('Hello World! finally the backedn deployed');
 })
+
+app.get('/check-env', (req, res) => {
+    try {
+        const clientUrl = process.env.CLIENT_URL;
+        res.json({ clientUrl });
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+})
+
 
 
 try {
