@@ -31,7 +31,7 @@ export const loginController = async(req, res) => {
         res.status(400).json({ message: ("All input are required, or in am not getting proper things from the frontend"), receivedDetails: req.body });
     }
     const response = await User.findOne();
-    res.status(200).json({ message: ("All input are there, or in am getting proper things from the frontend"), receivedDetails: req.body, fromDB: response });
+    res.status(200).json({ message: ("All input are there, or in am getting proper things from the frontend"), dbResponseLength: response.length, receivedDetails: req.body, fromDB: response });
     // const user = await User.findOne({ email: email });
     // if (!user) {
     //     res.status(404).json({ message: ("User not found"), receivedDetails: req.body });
