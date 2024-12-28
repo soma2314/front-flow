@@ -18,16 +18,38 @@ export const userController = async(req, res) => {
 }
 
 export const logoutController = async(req, res) => {
-    console.log("came for the logout");
+    try {
+        // Multiple cookie clear attempts with different configurations
+        res.clearCookie("token", {
+            path: "/",
+            secure: true,
+            httpOnly: true,
+            sameSite: 'none',
+        });
 
-    res.clearCookie("token", {
-        path: "/",
-        secure: true,
-        httpOnly: true,
-        sameSite: 'none',
-        domain: new URL(process.env.CLIENT_URL).hostname,
-    });
-    return res.status(200).send("Logout successful");
+        res.clearCookie("token", {
+            path: "/",
+            secure: true,
+            httpOnly: true,
+            sameSite: 'none',
+            domain: new URL(process.env.CLIENT_URL).hostname
+        });
+
+        // Force cookie expiration
+        res.cookie("token", "", {
+            path: "/",
+            secure: true,
+            httpOnly: true,
+            sameSite: 'none',
+            expires: new Date(0)
+        });
+
+        console.log("Cookies cleared");
+        return res.status(200).json({ message: "Logout successful" });
+    } catch (error) {
+        console.error("Logout error:", error);
+        return res.status(500).json({ message: "Logout failed" });
+    }
 }
 
 export const loginController = async(req, res) => {

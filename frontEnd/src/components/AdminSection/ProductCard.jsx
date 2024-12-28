@@ -65,10 +65,15 @@ const ProductCard = ({ product, onUpdate, onDelete, categories }) => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `${baseurl}update-product/${product._id}`,
+        `${baseurl}/update-product/${product._id}`,
         editedProduct,
-        { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
-      );
+        { 
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'
+            },
+            withCredentials: true
+        }
+    );
 
       if (response.data.message === "Product updated successfully") {
         toast.success('Product updated successfully!');

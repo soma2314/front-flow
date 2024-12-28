@@ -110,7 +110,7 @@ export const getAdminProducts = async(req, res) => {
 
 export const editProductController = async(req, res) => {
     console.log("editProductController");
-    const { title, description, price, category, quantity, seller } = req.body;
+    const { title, description, price, category, subcategory, quantity, seller } = req.body;
     console.log("getting the user details from the token");
     if (!req.user) {
         return res.status(401).json({
@@ -144,6 +144,7 @@ export const editProductController = async(req, res) => {
         product.category = category;
         product.quantity = quantity;
         product.seller = seller;
+        product.subcategory = subcategory;
         await product.save();
         return res.status(200).json({
             message: "Product updated successfully"

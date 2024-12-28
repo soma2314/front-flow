@@ -36,7 +36,9 @@ function Logout() {
             try {
                 const success = await handleLogout(dispatch);
                 if (success) {
-                    navigate("/");
+                    setTimeout(() => {
+                        navigate("/");
+                    }, 1000);
                 } else {
                     setLogoutError(true);
                 }
