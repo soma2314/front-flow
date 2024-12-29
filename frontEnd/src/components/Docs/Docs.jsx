@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, CheckCircle2, Code2, Book, AlertTriangle, Grid, Info } from 'lucide-react';
-
+import { Copy, CheckCircle2, Code2, Book, AlertTriangle, Grid, Info, Play } from 'lucide-react';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -122,17 +121,35 @@ export default function Docs(){
           {/* Content Area */}
           <div className="col-span-12 md:col-span-9">
             <div className="card bg-base-100 shadow-xl">
-              <div className="card-body">
+              <div className="card-body p-8">
                 {activeTab === 'getting-started' && (
-                  <div className="space-y-6">
-                    <section>
-                      <h2 className="text-2xl font-bold mb-4">Authentication</h2>
-                      <div className="steps steps-vertical">
-                        <div className="step step-primary">Create an account</div>
-                        <div className="step step-primary">Generate API key</div>
-                        <div className="step step-primary">Include in requests</div>
+                  <div className="space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      {/* Authentication Section */}
+                      <div className="flex flex-col justify-start">
+                        <h2 className="text-2xl font-bold mb-6">Authentication</h2>
+                        <div className="steps steps-vertical min-h-[200px]">
+                          <div className="step step-primary">Create an account</div>
+                          <div className="step step-primary">Generate API key</div>
+                          <div className="step step-primary">Include in requests</div>
+                        </div>
                       </div>
-                    </section>
+                      
+                      {/* Video Section */}
+                      <div>
+                      <h2 className="text-2xl font-bold text-white mb-6">How It Works</h2>
+                      <div className="relative w-full pt-[56.25%] bg-gray-900 rounded-xl overflow-hidden border-2 border-purple-500">
+                        <iframe
+                          className="absolute top-0 left-0 w-full h-full"
+                          src="https://www.youtube.com/embed/ySUyHB6YOuo"
+                          title="How It Works"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    </div>
+                    </div>
                     
                     <section>
                       <h2 className="text-2xl font-bold mb-4">Base URL</h2>
@@ -173,8 +190,10 @@ export default function Docs(){
 
                 {activeTab === 'categories' && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Info className="h-5 w-5 text-info mt-0.5" />
-                    <p className="text-sm">"Just click on the copy, the whole url will be copied, later just replace "yourApiKey" with generated api key"</p>
+                    <div className="col-span-2 bg-info/10 border border-info/20 rounded-lg p-4 flex gap-2 items-start">
+                      <Info className="h-5 w-5 text-info mt-0.5" />
+                      <p className="text-sm">Just click on the copy icon, the whole URL will be copied. Later just replace "yourApiKey" with your generated API key</p>
+                    </div>
                     {Object.entries(categories).map(([category, subcategories]) => (
                       <div key={category} className="card bg-base-200 hover:shadow-lg transition-shadow">
                         <div className="card-body">
@@ -257,4 +276,4 @@ export default function Docs(){
       </div>
     </div>
   );
-}; 
+};
