@@ -1,6 +1,7 @@
 # Ecommerce-product-details
 
 Some change in readMe, minor
+some minor changes
 
 api-key-26dbbb14-f4ee-497c-997c-b7f0337784e0
 
