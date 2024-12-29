@@ -17,7 +17,7 @@ const Register = () => {
     userType: "user",
     adminPassword: "",
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -49,6 +49,7 @@ const Register = () => {
       return;
     }
 
+    setIsLoading(true);
     try {
       const res = await axios.post(
         `${baseurl}/register`,
@@ -79,6 +80,8 @@ const Register = () => {
     } catch (error) {
       const errorMessage = error.response?.data?.message || "An unexpected error occurred";
       toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,6 +112,7 @@ const Register = () => {
                 className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-300 placeholder-gray-500"
                 placeholder="Enter your name"
                 required
+                disabled={isLoading}
               />
             </div>
 
@@ -125,6 +129,7 @@ const Register = () => {
                 className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-300 placeholder-gray-500"
                 placeholder="Enter your email"
                 required
+                disabled={isLoading}
               />
             </div>
 
@@ -142,11 +147,13 @@ const Register = () => {
                   className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-300 placeholder-gray-500 pr-10"
                   placeholder="Create a password"
                   required
+                  disabled={isLoading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
+                  disabled={isLoading}
                 >
                   <i className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`} />
                 </button>
@@ -167,11 +174,13 @@ const Register = () => {
                   className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-300 placeholder-gray-500 pr-10"
                   placeholder="Confirm your password"
                   required
+                  disabled={isLoading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
+                  disabled={isLoading}
                 >
                   <i className={`fa ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`} />
                 </button>
@@ -193,6 +202,7 @@ const Register = () => {
                 value={formValues.userType}
                 onChange={handleChange}
                 className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-300"
+                disabled={isLoading}
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
@@ -213,6 +223,7 @@ const Register = () => {
                   className="w-full px-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-300 placeholder-gray-500"
                   placeholder="Enter admin password"
                   required
+                  disabled={isLoading}
                 />
               </div>
             )}
@@ -220,9 +231,17 @@ const Register = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+              disabled={isLoading}
+              className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
             >
-              Create Account
+              {isLoading ? (
+                <span className="flex items-center justify-center">
+                  <i className="fa fa-spinner fa-spin mr-2" />
+                  Creating Account...
+                </span>
+              ) : (
+                "Create Account"
+              )}
             </button>
           </form>
 
