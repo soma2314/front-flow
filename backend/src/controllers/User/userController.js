@@ -19,32 +19,30 @@ export const userController = async(req, res) => {
 
 export const logoutController = async(req, res) => {
     try {
-        // Multiple cookie clear attempts with different configurations
-        res.clearCookie("token", {
-            path: "/",
-            secure: true, // Make sure this is enabled in production with HTTPS
-            sameSite: 'none', // Important for cross-domain (cookie will be sent even if the request is made from a different domain)
-            httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
-        });
-
+        // Clear the cookie with exact same options as it was set with
         res.clearCookie("token", {
             path: "/",
             secure: true,
-            httpOnly: true,
             sameSite: 'none',
-            domain: new URL(process.env.CLIENT_URL).hostname
+            httpOnly: true
         });
 
-        // Force cookie expiration
+        // Also set an expired cookie as backup
         res.cookie("token", "", {
             path: "/",
             secure: true,
-            httpOnly: true,
             sameSite: 'none',
+            httpOnly: true,
             expires: new Date(0)
         });
 
-        console.log("Cookies cleared");
+        // Set cache control headers
+        res.set({
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        });
+
         return res.status(200).json({ message: "Logout successful" });
     } catch (error) {
         console.error("Logout error:", error);

@@ -23,17 +23,17 @@ const Login = () => {
       const res = await axios.post(
         `${baseurl}/login`,
         {
-          email: email,
-          password: password,
+            email: email,
+            password: password,
         },
         {
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-            "Content-Type": 'application/x-www-form-urlencoded'
-          },
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'
+            },
         }
-      );
+    );
 
       dispatch(
         addEmail({

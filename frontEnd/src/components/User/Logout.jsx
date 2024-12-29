@@ -8,9 +8,8 @@ import { useEffect, useState } from "react";
 
 const baseurl = import.meta.env.VITE_BASE_URL;
 
-async function handleLogout(dispatch) {
+const handleLogout = async (dispatch) => {
     try {
-        // Make sure the baseurl matches exactly with your CLIENT_URL env variable
         const response = await axios.get(`${baseurl}/logout`, {
             withCredentials: true,
             credentials: 'include',
@@ -20,18 +19,14 @@ async function handleLogout(dispatch) {
         });
 
         if (response.status === 200) {
-            // Clear any local storage or session storage if you're using any
-            localStorage.clear();
-            sessionStorage.clear();
-            
             // Clear Redux state
             dispatch(removeEmail());
-
-            // Manually clear cookies from client side as backup
+            
+            // Clear cookies on client side as backup
             document.cookie.split(";").forEach(cookie => {
                 document.cookie = cookie
                     .replace(/^ +/, "")
-                    .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`);
+                    .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/;secure;samesite=none`);
             });
             
             toast.success("Logout successful");
@@ -40,7 +35,7 @@ async function handleLogout(dispatch) {
         return false;
     } catch (error) {
         console.error("Logout error:", error);
-        toast.error(error.response?.data?.message || "Logout failed");
+        toast.error("Logout failed");
         return false;
     }
 }
