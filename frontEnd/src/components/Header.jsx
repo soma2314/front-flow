@@ -11,7 +11,7 @@ const Header = () => {
   
   return (
     <header className="relative z-20">
-      <nav className="bg-base-300 backdrop-blur-sm border-b border-gray-800">
+      <nav className="bg-gray-900 backdrop-blur-sm border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             {/* Left Section: Dropdown and Logo */}
@@ -26,12 +26,12 @@ const Header = () => {
                   </label>
                   <ul 
                     tabIndex={0} 
-                    className="dropdown-content z-[999] menu p-2 shadow-lg bg-gray-800 rounded-lg w-52 absolute left-0 mt-2"
+                    className="dropdown-content z-[999] menu p-2 shadow-lg bg-gray-900 rounded-lg w-52 absolute left-0 mt-2"
                   >
                     <li>
                       <Link 
                         to="/" 
-                        className="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm"
+                        className="text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 rounded-md text-sm"
                       >
                         Home
                       </Link>
@@ -39,7 +39,7 @@ const Header = () => {
                     <li>
                       <Link 
                         to="/docs" 
-                        className="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm"
+                        className="text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 rounded-md text-sm"
                       >
                         Docs
                       </Link>
@@ -48,7 +48,7 @@ const Header = () => {
                       <li>
                         <Link 
                           to="/api-endpoints" 
-                          className="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm"
+                          className="text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 rounded-md text-sm"
                         >
                           Api Endpoints
                         </Link>
@@ -58,7 +58,7 @@ const Header = () => {
                       <li>
                         <Link 
                           to="/admin-section" 
-                          className="text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm"
+                          className="text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 rounded-md text-sm"
                         >
                           Admin Section
                         </Link>

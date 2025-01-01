@@ -3,7 +3,7 @@ import { Workflow } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-base-300 border-t border-gray-800">
+    <footer className="bg-gray-900 border-t border-gray-800">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info with New Logo */}
